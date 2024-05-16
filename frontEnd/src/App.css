@@ -1,0 +1,14 @@
+#map{
+  width: 100vw;
+  height: 100vh;
+}
+.base-Layout{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1;
+  padding: 15px;
+  background-color: rgb(120, 94, 235);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(48, 48, 48, 0.3);
+}

@@ -1,0 +1,17 @@
+.create-feature__title{
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.create-feature__form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.create-feature__form input{
+    border: none;
+    padding: 5px;
+}
