@@ -1,3 +1,8 @@
+.about-feature{
+    top: 15px;
+    left: 15px;
+}
+
 .about-feature h2, .about-feature p{
     color: white;
 }
