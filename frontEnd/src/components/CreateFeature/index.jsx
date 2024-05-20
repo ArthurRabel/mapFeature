@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addFeicao } from '../../actions/feicaoSlice';
-import { toggleForm } from '../../actions/formSlice';
+import { addFeature } from '../../actions/featureSlice';
+import { closedForm } from '../../actions/formSlice';
 import './style.css';
 
 export default function CreateFeature(coordinates) {
@@ -11,12 +11,13 @@ export default function CreateFeature(coordinates) {
     /* Envia o formulario para o Redux */
     document.querySelector('.create-feature__form').addEventListener('submit', (event) => {
       event.preventDefault();
-      dispatch(addFeicao({
+      console.log("no formulario ta ",coordinates)
+      dispatch(addFeature({
         geometry: coordinates,
         name: document.querySelector('#name').value,
         description: document.querySelector('#description').value,
       }));
-      dispatch(toggleForm());
+      dispatch(closedForm());
     });
   }, []);
   return (

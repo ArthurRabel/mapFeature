@@ -4,12 +4,15 @@ export const formSlice = createSlice({
   name: 'form',
   initialState: { isOpen: false},
   reducers: {
-    toggleForm: (state) => {
-      state.isOpen = !state.isOpen;
+    openForm: (state) => {
+      state.isOpen = true;
+    },
+    closedForm: (state) => {
+      state.isOpen = false;
     },
   },
 });
 
-export const { toggleForm } = formSlice.actions;
+export const { openForm, closedForm } = formSlice.actions;
 
 export default formSlice.reducer;

@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import feicaoReducer from './actions/feicaoSlice.js';
+import featureReducer from './actions/featureSlice.js';
 import formReducer from './actions/formSlice.js';
 import aboutFeatureReducer from './actions/aboutFeatureSlice.js';
 
 
 export default configureStore({
   reducer: {
-    feicao: feicaoReducer,
+    feature: featureReducer,
     form: formReducer,
     aboutFeature: aboutFeatureReducer,
   },
