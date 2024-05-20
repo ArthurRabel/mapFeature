@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'maps',
 ]
 
 MIDDLEWARE = [
@@ -122,7 +123,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'template/static']
+STATICFILES_DIRS = [
+    BASE_DIR / 'template/static',
+    BASE_DIR / 'maps/static',
+]
 STATIC_ROOT = BASE_DIR / 'static'
 
 CORS_ORIGIN_ALLOW_ALL = True

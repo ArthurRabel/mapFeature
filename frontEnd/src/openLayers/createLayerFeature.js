@@ -16,8 +16,8 @@ const createVectorLayer = (featureData) => {
                 } else if(feature.geometry.coordinates.length == 2) {
                     geometry = new LineString(feature.geometry.coordinates);
                 } else {
-                    feature.geometry.coordinates.push(feature.geometry.coordinates[0])
-                    geometry = new Polygon([feature.geometry.coordinates]);
+                    let coordinates = [...feature.geometry.coordinates, feature.geometry.coordinates[0]];
+                    geometry = new Polygon([coordinates]);
                 }
 
                 return new Feature({
