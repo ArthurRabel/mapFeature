@@ -1,10 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="./static/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -13,10 +12,10 @@
     </header>
     <main>
         <article>
-            <img src="{% static 'heroMap.png' %}" alt="">
+            <img src="./static/heroMap.png" alt="">
             <div>
                 <h2>Map Feature</h2>
-                <form method="get" action="http://127.0.0.1:8000/maps/mapfeature/">
+                <form method="get" action="http://127.0.0.1:8000/mapfeature/">
                     <input type="submit" value="Acessar">
                 </form>
 

@@ -2,3 +2,7 @@ Django
 djangorestframework
 django-cors-headers
 psycopg
+fastapi
+daphne
+SQLAlchemy
+shapely

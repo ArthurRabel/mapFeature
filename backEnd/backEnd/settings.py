@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'maps',
 ]
 
 MIDDLEWARE = [
@@ -52,8 +52,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'backEnd.urls'
 
 TEMPLATES = [
     {
@@ -71,8 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backEnd.wsgi.application'
-
+ASGI_APPLICATION = "backEnd.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -122,12 +119,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'template/static',
-    BASE_DIR / 'maps/static',
+    BASE_DIR / 'backEnd/templates/home/static',            
+    BASE_DIR / 'backEnd/templates/mapFeature/static',        
 ]
-STATIC_ROOT = BASE_DIR / 'static'
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -135,3 +132,4 @@ CORS_ORIGIN_ALLOW_ALL = True
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
