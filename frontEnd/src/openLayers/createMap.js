@@ -16,7 +16,7 @@ const createMap = () => {
       /* Define a visualização inicial */
       view: new View({
         center: [-5321776.2801238755, -1780070.8812950752],
-        zoom: 11,
+        zoom: 12,
       }),
     });
 }

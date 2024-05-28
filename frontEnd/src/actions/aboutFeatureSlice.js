@@ -4,12 +4,15 @@ export const aboutFeatureSlice = createSlice({
   name: 'aboutFeature',
   initialState: { isOpen: false},
   reducers: {
-    toggleAboutFeature: (state) => {
-      state.isOpen = !state.isOpen;
+    openAboutFeature: (state) => {
+      state.isOpen = true;
+    },
+    closedAboutFeature: (state) => {
+      state.isOpen = false;
     },
   },
 });
 
-export const { toggleAboutFeature} = aboutFeatureSlice.actions;
+export const { openAboutFeature, closedAboutFeature } = aboutFeatureSlice.actions;
 
 export default aboutFeatureSlice.reducer;

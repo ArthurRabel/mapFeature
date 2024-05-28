@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addFeature } from '../../actions/featureSlice';
 import { closedForm } from '../../actions/formSlice';
 import './style.css';
 

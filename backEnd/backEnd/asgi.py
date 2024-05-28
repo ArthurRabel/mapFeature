@@ -1,15 +1,11 @@
-import os
 from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
-from backEnd.connectDB import metadata, session, engine
+from fastapi.encoders import jsonable_encoder
+from backEnd.connectDB import session
+from backEnd.models import Features
 from shapely.geometry import Point, LineString, Polygon
-from sqlalchemy import Table, insert
-from geoalchemy2 import WKTElement
-
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backEnd.settings')
 
 application = FastAPI()
 
@@ -24,29 +20,36 @@ def mapfeature(request: Request):
     return templates.TemplateResponse("mapFeature/index.html", {"request": request})
 
 @application.post("/mapfeature/post/")
-async def featurepush(request: Request):
+async def featurePost(request: Request):
     json_data = await request.json()
 
-    coordinates = json_data['coordinates']
+    coordinatesList = json_data['coordinates']
 
-    if len(coordinates) == 1:
-        coordinatesFeature = WKTElement(Point(coordinates[0]).wkt, srid=4326)
-    if len(coordinates) == 2:
-        coordinatesFeature = WKTElement(LineString(coordinates).wkt, srid=4326)
-    if len(coordinates) > 2:
-        coordinatesFeature = WKTElement(Polygon(coordinates).wkt, srid=4326)
+    if len(coordinatesList) == 1:
+        coordinatesFeature = Point(coordinatesList[0]).wkt
+    elif len(coordinatesList) == 2:
+        coordinatesFeature = LineString(coordinatesList).wkt
+    elif len(coordinatesList) > 2:
+        coordinatesFeature = Polygon(coordinatesList).wkt
 
-    new_feature = {
-        'name':json_data['name'],
-        'description':json_data['description'],
-        'coordinates':coordinatesFeature,
-    }
+    feature = Features(name=json_data['name'], description=json_data['description'], coordinates=coordinatesFeature)
 
-    features = Table('features', metadata, autoload_with=engine)
-
-    submitDB = insert(features).values(new_feature)
-
-    with engine.connect() as connection:
-        connection.execute(submitDB)
+    session.add(feature)
+    session.commit()
 
     return RedirectResponse(url="/mapfeature/", status_code=303)
+
+@application.delete("/mapfeature/delete/")
+async def featurePost(request: Request):
+    requestJson = await request.json()
+
+    feature = session.query(Features).filter(Features.id == requestJson['id']).first()
+    session.delete(feature)
+    session.commit()
+
+    return RedirectResponse(url="/mapfeature/", status_code=303)
+
+@application.get("/mapfeature/get/")
+async def featureGet(request: Request):
+    features = session.query(Features).all()
+    return jsonable_encoder([feature.to_dict() for feature in features])

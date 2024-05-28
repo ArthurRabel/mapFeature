@@ -2,18 +2,28 @@
   width: 100vw;
   height: 100vh;
 }
+
 .base-layout{
   position: absolute;
   z-index: 1;
-  padding: 15px;
+  padding: 10px;
   background-color: rgb(120, 94, 235);
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(48, 48, 48, 0.3);
 }
 
 .div-add-feature{
-  bottom: 15px;
+  top: 15px;
   left: 15px;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.div-delete-feature{
+  top: 15px;
+  left: 95px;
   border: none;
   color: white;
   font-size: 1.25rem;

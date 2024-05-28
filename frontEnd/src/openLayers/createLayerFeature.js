@@ -1,29 +1,18 @@
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import Polygon from 'ol/geom/Polygon';
-import LineString from 'ol/geom/LineString';
+import WKB from 'ol/format/WKB';
 
 const createVectorLayer = (featureData) => {
+    const format = new WKB();
     return new VectorLayer({
         source: new VectorSource({
             features: featureData.map((feature) => {
-                console.log(feature.geometry.coordinates)
-                let geometry;
-                if(feature.geometry.coordinates.length == 1) {
-                    geometry = new Point(feature.geometry.coordinates[0]);
-                } else if(feature.geometry.coordinates.length == 2) {
-                    geometry = new LineString(feature.geometry.coordinates);
-                } else {
-                    let coordinates = [...feature.geometry.coordinates, feature.geometry.coordinates[0]];
-                    geometry = new Polygon([coordinates]);
-                }
-
                 return new Feature({
-                    geometry: geometry,
+                    geometry: format.readGeometry(feature.coordinates),
                     name: feature.name,
                     description: feature.description,
+                    id: feature.id,
                 });
             })
         }),

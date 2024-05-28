@@ -1,14 +1,26 @@
-from sqlalchemy import Table, Column, Integer, String, MetaData, inspect
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Integer, String, MetaData
 from geoalchemy2 import Geometry
-from backEnd.connectDB import metadata, engine
+from backEnd.connectDB import engine
 
-if not inspect(engine).has_table('features'):
-   Table(
-      'features', metadata, 
-      Column('id', Integer, primary_key=True), 
-      Column('name', String), 
-      Column('description', String),
-      Column('coordinates', Geometry('GEOMETRY'), srid=4326)
-   )
-   metadata.create_all(engine)
+metadata = MetaData()
 
+class Base(DeclarativeBase):
+   pass
+
+class Features(Base):
+   __tablename__ = 'features'
+   id: Mapped[int] = mapped_column(Integer, primary_key=True)
+   name: Mapped[str] = mapped_column(String(50))
+   description: Mapped[str] = mapped_column(String(255))
+   coordinates: Mapped[Geometry] = mapped_column(Geometry(geometry_type="GEOMETRY", srid=4326))
+
+   def to_dict(self):
+      return {
+         "id": self.id,
+         "name": self.name,
+         "description": self.description,
+         "coordinates": str(self.coordinates)
+      }
+
+Features.metadata.create_all(engine)
