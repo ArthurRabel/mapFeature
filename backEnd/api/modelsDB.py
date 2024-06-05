@@ -1,7 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, MetaData
 from geoalchemy2 import Geometry
-from backEnd.connectDB import engine
+from connectDB import engine
 
 metadata = MetaData()
 
