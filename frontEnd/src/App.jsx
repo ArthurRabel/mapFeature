@@ -27,7 +27,7 @@ export default function App() {
   const deleteFeatureRef = useRef();
 
   const requestFeatures = () => {
-    return fetch('http://127.0.0.1:8081/api/get/', {
+    return fetch('http://127.0.0.1:8000/api/get/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function App() {
   }
 
   const requestDeleteFeature = (FeatureId) => {
-    return fetch('http://127.0.0.1:8081/api/delete/', {
+    return fetch('http://127.0.0.1:8000/api/delete/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
