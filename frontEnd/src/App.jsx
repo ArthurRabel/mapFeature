@@ -10,7 +10,7 @@ import requestDeleteFeature from './requests/requestDeleteFeature';
 import { useSelector, useDispatch } from 'react-redux';
 import { closedForm, openForm } from './actions/formSlice';
 import { openAboutFeature, closedAboutFeature } from './actions/aboutFeatureSlice';
-import { isAddingFeature, notAddingFeature } from './actions/AddingFeatureSlice';
+import { isAddingFeature } from './actions/AddingFeatureSlice';
 import { useRef, useState, useCallback, useEffect } from 'react';
 
 export default function App() {
@@ -25,23 +25,18 @@ export default function App() {
   const [isRemovingFeature, setIsRemovingFeature] = useState(false);
 
   const mapRef = useRef();
-  const addFeatureRef = useRef();
-  const deleteFeatureRef = useRef();
 
-  const showDescriptionFeature = (map) => {
-    map.on('pointermove', function (evento) {
-      const featureFound = mapRef.current.hasFeatureAtPixel(evento.pixel);
-      if (featureFound) {
-        map.forEachFeatureAtPixel(evento.pixel, function (feature) {
-          setName(feature.get("name"));
-          setDescription(feature.get("description"));
-          dispatch(openAboutFeature());
-        });
-      } else {
-        dispatch(closedAboutFeature());
-      }
-    });
-  };
+  const showDescriptionFeature = useCallback((evento) => {
+    if (mapRef.current.hasFeatureAtPixel(evento.pixel)) {
+      mapRef.current.forEachFeatureAtPixel(evento.pixel, function (feature) {
+        setName(feature.get("name"));
+        setDescription(feature.get("description"));
+        dispatch(openAboutFeature());
+      });
+    } else {
+      dispatch(closedAboutFeature());
+    }
+  });
 
   const updateMap = () => {
     const layerToRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
@@ -64,7 +59,6 @@ export default function App() {
   }, [mapRef.current]);
 
   const captureCoordinates = useCallback((evento) => {
-    dispatch(openForm());
     const featureFound = mapRef.current.hasFeatureAtPixel(evento.pixel);
     if (!featureFound) {
       setCoordinates(prevCoordinates => [...prevCoordinates, evento.coordinate]);
@@ -73,7 +67,7 @@ export default function App() {
 
   useEffect(() => {
     if (!mapRef.current) { mapRef.current = createMap(); }
-    showDescriptionFeature(mapRef.current);
+    mapRef.current.on('pointermove', showDescriptionFeature);
   }, []);
 
   // Adiciona evento de adicionar feature
