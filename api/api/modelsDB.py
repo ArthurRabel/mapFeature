@@ -22,5 +22,3 @@ class Features(Base):
          "description": self.description,
          "coordinates": str(self.coordinates)
       }
-
-Features.metadata.create_all(engine)

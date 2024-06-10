@@ -15,7 +15,7 @@ class ReponseFeature(BaseModel):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000"],
+    allow_origins=["http://0.0.0.0:80"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type"],
@@ -25,10 +25,6 @@ app.add_middleware(
 async def featureGet():
     features = session.query(Features).all()
     return jsonable_encoder([feature.to_dict() for feature in features])
-
-@app.options("/api/get/")
-async def featureTest():
-    return {"message": "Hello World"}
 
 @app.post("/api/post/")
 async def featurePost(reponseFeature: ReponseFeature):
@@ -48,10 +44,10 @@ async def featurePost(reponseFeature: ReponseFeature):
 
     return reponseFeature
 
-@app.delete("/api/delete/")
-async def featureDelete(reponseFeature: ReponseFeature):
-    feature = session.query(Features).filter(Features.id == reponseFeature.id).first()
+@app.delete("/api/delete/{idfeature}")
+async def featureDelete(idfeature):
+    feature = session.query(Features).filter(Features.id == idfeature).first()
     session.delete(feature)
     session.commit()
 
-    return reponseFeature
+    return idfeature

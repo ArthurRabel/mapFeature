@@ -5,6 +5,8 @@ import CreateFeature from './components/CreateFeature';
 import AboutFeature from './components/AboutFeature';
 import createMap from './openLayers/createMap';
 import createVectorLayer from './openLayers/createLayerFeature';
+import requestFeatures from './requests/requestFeatures';
+import requestDeleteFeature from './requests/requestDeleteFeature';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { openForm } from './actions/formSlice';
@@ -25,28 +27,6 @@ export default function App() {
   const mapRef = useRef();
   const addFeatureRef = useRef();
   const deleteFeatureRef = useRef();
-
-  const requestFeatures = () => {
-    return fetch('http://127.0.0.1:8000/api/get/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .catch((error) => console.error('Error:', error));
-  }
-
-  const requestDeleteFeature = (FeatureId) => {
-    return fetch('http://127.0.0.1:8000/api/delete/', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 'id': FeatureId }),
-    })
-      .catch((error) => console.error('Error:', error));
-  }
 
   const showDescriptionFeature = (map) => {
     map.on('pointermove', function (evento) {
@@ -113,8 +93,8 @@ export default function App() {
     }
   }, [isAddingFeature]);
 
-  // Adiciona evento de adicionar feature
-  useEffect(() => {
+  // Adiciona evento de remover feature
+  useEffect(() => { 
     if (isRemovingFeature) {
       mapRef.current.on('click', deleteFeatureRef.current);
     } else {

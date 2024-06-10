@@ -7,9 +7,8 @@ export default function CreateFeature({coordinates}) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    /* Envia o formulario para o Redux */
     document.querySelector('#submitForm').addEventListener('click', (event) => {
-      fetch('http://127.0.0.1:8000/mapfeature/post/', {
+      fetch('http://localhost:8000/api/post/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

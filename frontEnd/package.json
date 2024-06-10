@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "rm -rf ../backEnd/backEnd/templates/mapFeature && vite build && cp -r mapFeature ../backEnd/backEnd/templates/ && rm -rf mapFeature",
+    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
