@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { closedForm } from '../../actions/formSlice';
+import { notAddingFeature } from '../../actions/AddingFeatureSlice';
 import './style.css';
 
 export default function CreateFeature({coordinates}) {
@@ -18,7 +18,7 @@ export default function CreateFeature({coordinates}) {
           description: document.querySelector('#description').value,
           coordinates: coordinates,
         }),
-      }).then(() => dispatch(closedForm()));
+      }).then(() => {dispatch(notAddingFeature())});
     });
   }, []);
   return (

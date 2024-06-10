@@ -7,21 +7,21 @@ import createMap from './openLayers/createMap';
 import createVectorLayer from './openLayers/createLayerFeature';
 import requestFeatures from './requests/requestFeatures';
 import requestDeleteFeature from './requests/requestDeleteFeature';
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { openForm } from './actions/formSlice';
+import { closedForm, openForm } from './actions/formSlice';
 import { openAboutFeature, closedAboutFeature } from './actions/aboutFeatureSlice';
-import { useRef, useState } from 'react';
+import { isAddingFeature, notAddingFeature } from './actions/AddingFeatureSlice';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 export default function App() {
   const dispatch = useDispatch();
   const isOpenForm = useSelector((state) => state.form.isOpen);
   const AboutFeatureToggle = useSelector((state) => state.aboutFeature.isOpen);
+  const AddingFeature = useSelector((state) => state.AddingFeature.addingFeature);
 
   const [coordinates, setCoordinates] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [isAddingFeature, setIsAddingFeature] = useState(false);
   const [isRemovingFeature, setIsRemovingFeature] = useState(false);
 
   const mapRef = useRef();
@@ -54,69 +54,56 @@ export default function App() {
     });
   }
 
-  const deleteFeature = (evento) => {
+  const deleteFeature = useCallback((evento) => {
     map.forEachFeatureAtPixel(evento.pixel, function (feature) {
       requestDeleteFeature(feature.get("id")).then(() => {
         updateMap();
         setIsRemovingFeature(false);
       });
     });
-  }
+  }, [mapRef.current]);
 
-  const addFeature = (evento) => {
+  const captureCoordinates = useCallback((evento) => {
+    dispatch(openForm());
     const featureFound = mapRef.current.hasFeatureAtPixel(evento.pixel);
     if (!featureFound) {
       setCoordinates(prevCoordinates => [...prevCoordinates, evento.coordinate]);
     }
-  }
+  }, [mapRef.current]);
 
   useEffect(() => {
     if (!mapRef.current) { mapRef.current = createMap(); }
-    addFeatureRef.current = addFeature;
-    deleteFeatureRef.current = deleteFeature;
     showDescriptionFeature(mapRef.current);
   }, []);
 
-  // Abre o formulario para adicionar feature
-  useEffect(() => {
-    if (coordinates.length > 0) {
-      dispatch(openForm());
-    }
-  }, [coordinates]);
-
   // Adiciona evento de adicionar feature
   useEffect(() => {
-    if (isAddingFeature) {
-      mapRef.current.on('click', addFeatureRef.current);
+    if (AddingFeature) {
+      mapRef.current.on('click', captureCoordinates);
+      dispatch(openForm());
     } else {
-      mapRef.current.un('click', addFeatureRef.current);
+      mapRef.current.un('click', captureCoordinates);
+      dispatch(closedForm());
+      setCoordinates([]);
+      updateMap();
     }
-  }, [isAddingFeature]);
+  }, [AddingFeature]);
 
   // Adiciona evento de remover feature
   useEffect(() => { 
     if (isRemovingFeature) {
-      mapRef.current.on('click', deleteFeatureRef.current);
+      mapRef.current.on('click', deleteFeature);
     } else {
-      mapRef.current.un('click', deleteFeatureRef.current);
+      mapRef.current.un('click', deleteFeature);
     }
   }, [isRemovingFeature]);
-
-  // Apos envio do formulario o mapa atualiza e remove o evento de adicionar feature
-  useEffect(() => {
-    if (!isOpenForm) {
-      setCoordinates([]);
-      setIsAddingFeature(false);
-      updateMap();
-    }
-  }, [isOpenForm]);
 
   return (
     <>
       {AboutFeatureToggle && <AboutFeature data={{ 'name': name, 'description': description }} />}
       {isOpenForm && <CreateFeature key={coordinates} coordinates={coordinates} />}
-      <button onClick={() => setIsAddingFeature(true)} className='base-layout div-add-feature'><AddIcon /></button>
-      <button onClick={() => setIsRemovingFeature(true)} className='base-layout div-delete-feature'><DeleteIcon /></button>
+      <button onClick={() => {if(!isRemovingFeature){dispatch(isAddingFeature())}}} className='base-layout div-add-feature'><AddIcon /></button>
+      <button onClick={() => {if(!AddingFeature){setIsRemovingFeature(true)}}} className='base-layout div-delete-feature'><DeleteIcon /></button>
       <div id="map"></div>
     </>
   );
