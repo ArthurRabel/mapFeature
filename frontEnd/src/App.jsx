@@ -4,6 +4,7 @@ import DeleteIcon from './assets/delete_icon.svg?react'
 import CreateFeature from './components/CreateFeature';
 import AboutFeature from './components/AboutFeature';
 import createMap from './openLayers/createMap';
+import createFeaturePrevision from './openLayers/createFeaturePrevision';
 import createVectorLayer from './openLayers/createLayerFeature';
 import requestFeatures from './requests/requestFeatures';
 import requestDeleteFeature from './requests/requestDeleteFeature';
@@ -12,6 +13,8 @@ import { closedForm, openForm } from './actions/formSlice';
 import { openAboutFeature, closedAboutFeature } from './actions/aboutFeatureSlice';
 import { isAddingFeature } from './actions/AddingFeatureSlice';
 import { useRef, useState, useCallback, useEffect } from 'react';
+import Feature from 'ol/Feature';
+import { Point } from 'ol/geom';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -36,7 +39,7 @@ export default function App() {
     } else {
       dispatch(closedAboutFeature());
     }
-  });
+  }, [mapRef.current]);
 
   const updateMap = () => {
     const layerToRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
@@ -63,16 +66,20 @@ export default function App() {
     if (!featureFound) {
       setCoordinates(prevCoordinates => [...prevCoordinates, evento.coordinate]);
     }
-  }, [mapRef.current]);
+    const featurePrevision = createFeaturePrevision(evento);
+    const layer = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
+    layer.getSource().addFeature(featurePrevision);
 
+  }, [mapRef.current]);
+  
   useEffect(() => {
     if (!mapRef.current) { mapRef.current = createMap(); }
-    mapRef.current.on('pointermove', showDescriptionFeature);
   }, []);
 
   // Adiciona evento de adicionar feature
   useEffect(() => {
     if (AddingFeature) {
+      mapRef.current.un('pointermove', showDescriptionFeature);
       mapRef.current.on('click', captureCoordinates);
       dispatch(openForm());
     } else {
