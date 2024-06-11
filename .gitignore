@@ -25,5 +25,3 @@ dist-ssr
 
 **/__pycache__/
 **/venv/
-
-**/nginx/
