@@ -13,8 +13,6 @@ import { closedForm, openForm } from './actions/formSlice';
 import { openAboutFeature, closedAboutFeature } from './actions/aboutFeatureSlice';
 import { isAddingFeature } from './actions/AddingFeatureSlice';
 import { useRef, useState, useCallback, useEffect } from 'react';
-import Feature from 'ol/Feature';
-import { Point } from 'ol/geom';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -45,6 +43,9 @@ export default function App() {
     const layerToRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
     mapRef.current.removeLayer(layerToRemove);
 
+    const layerPrevisionRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeaturesPrevision');
+    layerPrevisionRemove.getSource().clear();
+
     requestFeatures().then((featureData) => {
       const vectorLayer = createVectorLayer(featureData);
       mapRef.current.addLayer(vectorLayer);
@@ -59,21 +60,25 @@ export default function App() {
         setIsRemovingFeature(false);
       });
     });
-  }, [mapRef.current]);
+  }, [mapRef.current]); 
+
+  const functionFeaturePrevision = (evento) => {
+    const featurePrevision = createFeaturePrevision(evento);
+    const layer = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeaturesPrevision');
+    layer.getSource().addFeature(featurePrevision);
+  }
 
   const captureCoordinates = useCallback((evento) => {
     const featureFound = mapRef.current.hasFeatureAtPixel(evento.pixel);
     if (!featureFound) {
       setCoordinates(prevCoordinates => [...prevCoordinates, evento.coordinate]);
     }
-    const featurePrevision = createFeaturePrevision(evento);
-    const layer = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
-    layer.getSource().addFeature(featurePrevision);
-
-  }, [mapRef.current]);
+    functionFeaturePrevision(evento);
+  }, [mapRef.current]); 
   
   useEffect(() => {
     if (!mapRef.current) { mapRef.current = createMap(); }
+    mapRef.current.on('pointermove', showDescriptionFeature);
   }, []);
 
   // Adiciona evento de adicionar feature
@@ -83,9 +88,10 @@ export default function App() {
       mapRef.current.on('click', captureCoordinates);
       dispatch(openForm());
     } else {
+      mapRef.current.on('pointermove', showDescriptionFeature);
       mapRef.current.un('click', captureCoordinates);
       dispatch(closedForm());
-      setCoordinates([]);
+      setCoordinates([]); 
       updateMap();
     }
   }, [AddingFeature]);
