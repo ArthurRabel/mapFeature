@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: banco
-    image: postgis/postgis
+    image: docker.io/postgis/postgis
     ports:
     - containerPort: 5432
     volumeMounts:  
@@ -47,7 +47,7 @@ spec:
     - name: conf  
       mountPath: /etc/nginx/conf.d/
   - name: api1
-    image: map-feature-api-image
+    image: docker.io/arthurrabel/fastapi.with.geoalchemy:init
     ports:
     - containerPort: 81
     env:
@@ -67,7 +67,7 @@ spec:
       /wait-for-it.sh banco:5432 --timeout=30 --strict;
       uvicorn main:app --host 0.0.0.0 --port 81
   - name: api2
-    image: map-feature-api-image
+    image: docker.io/arthurrabel/fastapi.with.geoalchemy:init
     ports:
     - containerPort: 82
     env:
