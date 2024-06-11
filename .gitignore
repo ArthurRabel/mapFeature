@@ -21,7 +21,5 @@ dist-ssr
 *.sln
 *.sw?
 
-*Secret.yaml
-
 **/__pycache__/
 **/venv/
