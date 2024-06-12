@@ -7,25 +7,28 @@
   position: absolute;
   z-index: 1;
   padding: 10px;
-  background-color: rgb(120, 94, 235);
+  background-color: #785eeb;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(48, 48, 48, 0.3);
+  border: none;
+  color: white;
+  font-size: 1.25rem;
 }
 
-.div-add-feature{
+.add-feature{
   top: 15px;
   left: 15px;
-  border: none;
-  color: white;
-  font-size: 1.25rem;
   cursor: pointer;
 }
 
-.div-delete-feature{
+.delete-feature{
   top: 15px;
   left: 95px;
-  border: none;
-  color: white;
-  font-size: 1.25rem;
   cursor: pointer;
+}
+
+.notice{
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
 }
