@@ -21,11 +21,11 @@ const createMap = () => {
           source: new VectorSource({
             features: []
           }),
-          style: new Style({
-            image: new CircleStyle({
-              radius: 6,
-              fill: new Fill({ color: '#785eeb' }),
-            }),
+          name: 'LayersFeatures',
+        }),
+        new VectorLayer({
+          source: new VectorSource({
+            features: []
           }),
           name: 'LayersFeaturesPrevision',
         })

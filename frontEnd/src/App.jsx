@@ -5,7 +5,7 @@ import CreateFeature from './components/CreateFeature';
 import AboutFeature from './components/AboutFeature';
 import createMap from './openLayers/createMap';
 import createFeaturePrevision from './openLayers/createFeaturePrevision';
-import createVectorLayer from './openLayers/createLayerFeature';
+import createFeatures from './openLayers/createFeatures';
 import requestFeatures from './requests/requestFeatures';
 import requestDeleteFeature from './requests/requestDeleteFeature';
 import { useSelector, useDispatch } from 'react-redux';
@@ -40,15 +40,13 @@ export default function App() {
   }, [mapRef.current]);
 
   const updateMap = () => {
-    const layerToRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeatures');
-    mapRef.current.removeLayer(layerToRemove);
-
-    const layerPrevisionRemove = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeaturesPrevision');
-    layerPrevisionRemove.getSource().clear();
+    const layersArray = mapRef.current.getLayers().getArray();
+    layersArray.find(layer => layer.get('name') === 'LayersFeaturesPrevision').getSource().clear();
+    const LayersFeatures = layersArray.find(layer => layer.get('name') === 'LayersFeatures')
+    LayersFeatures.getSource().clear();
 
     requestFeatures().then((featureData) => {
-      const vectorLayer = createVectorLayer(featureData);
-      mapRef.current.addLayer(vectorLayer);
+      LayersFeatures.getSource().addFeatures(createFeatures(featureData));
       mapRef.current.render();
     });
   }
@@ -62,10 +60,14 @@ export default function App() {
     });
   }, [mapRef.current]); 
 
-  const functionFeaturePrevision = (evento) => {
-    const featurePrevision = createFeaturePrevision(evento);
-    const layer = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeaturesPrevision');
-    layer.getSource().addFeature(featurePrevision);
+  const functionFeaturePrevision = (coordinate) => {
+    const layerPrevision = mapRef.current.getLayers().getArray().find(layer => layer.get('name') === 'LayersFeaturesPrevision');
+    layerPrevision.getSource().clear();
+
+    const featurePrevision = createFeaturePrevision(coordinate);
+    layerPrevision.getSource().addFeature(featurePrevision);
+
+    mapRef.current.render();
   }
 
   const captureCoordinates = useCallback((evento) => {
@@ -73,13 +75,18 @@ export default function App() {
     if (!featureFound) {
       setCoordinates(prevCoordinates => [...prevCoordinates, evento.coordinate]);
     }
-    functionFeaturePrevision(evento);
   }, [mapRef.current]); 
   
   useEffect(() => {
     if (!mapRef.current) { mapRef.current = createMap(); }
     mapRef.current.on('pointermove', showDescriptionFeature);
   }, []);
+
+  useEffect(() => {
+    if (coordinates.length > 0) {
+      functionFeaturePrevision(coordinates)
+    }
+  }, [coordinates]);
 
   // Adiciona evento de adicionar feature
   useEffect(() => {
