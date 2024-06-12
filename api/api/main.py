@@ -1,17 +1,10 @@
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-from shapely.geometry import Point, LineString, Polygon
 from fastapi.middleware.cors import CORSMiddleware
-from connectDB import session
-from modelsDB import Features
+from operationsDB import save_feature, delete_feature, get_features
 
 app = FastAPI()
-
-class ReponseFeature(BaseModel):
-    name: str
-    description: str
-    coordinates: list
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,31 +16,20 @@ app.add_middleware(
 
 @app.get("/api/get/")
 async def featureGet():
-    features = session.query(Features).all()
-    return jsonable_encoder([feature.to_dict() for feature in features])
+    features = get_features()
+    return jsonable_encoder(features)
+
+class ResponseFeature(BaseModel):
+    name: str
+    description: str
+    coordinates: list
 
 @app.post("/api/post/")
-async def featurePost(reponseFeature: ReponseFeature):
-    coordinatesList = reponseFeature.coordinates
-
-    if len(coordinatesList) == 1:
-        coordinatesFeature = Point(coordinatesList[0]).wkt
-    elif len(coordinatesList) == 2:
-        coordinatesFeature = LineString(coordinatesList).wkt
-    elif len(coordinatesList) > 2:
-        coordinatesFeature = Polygon(coordinatesList).wkt
-
-    feature = Features(name=reponseFeature.name, description=reponseFeature.description, coordinates=coordinatesFeature)
-
-    session.add(feature)
-    session.commit()
-
-    return reponseFeature
+async def featurePost(responseFeature: ResponseFeature):
+    save_feature(responseFeature.name, responseFeature.description, responseFeature.coordinates)
+    return {'message': 'Feature posted successfully'}
 
 @app.delete("/api/delete/{idfeature}")
-async def featureDelete(idfeature):
-    feature = session.query(Features).filter(Features.id == idfeature).first()
-    session.delete(feature)
-    session.commit()
-
-    return idfeature
+async def featureDelete(idfeature: int):
+    delete_feature(idfeature)
+    return {'message': 'Feature deleted successfully'}
