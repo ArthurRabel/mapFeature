@@ -1,24 +1,15 @@
 import React, { useEffect } from 'react';
+import requestPostFeature from '../../requests/requestPostFeature';
 import { useDispatch } from 'react-redux';
 import { notAddingFeature } from '../../actions/AddingFeatureSlice';
 import './style.css';
 
-export default function CreateFeature({coordinates}) {
+export default function CreateFeature({ coordinates }) {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     document.querySelector('#submitForm').addEventListener('click', (event) => {
-      fetch('http://localhost:8000/api/post/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: document.querySelector('#name').value,
-          description: document.querySelector('#description').value,
-          coordinates: coordinates,
-        }),
-      }).then(() => {dispatch(notAddingFeature())});
+      requestPostFeature(document.querySelector('#name').value, document.querySelector('#description').value, coordinates).then(() => { dispatch(notAddingFeature()) });
     });
   }, []);
   return (
@@ -27,7 +18,7 @@ export default function CreateFeature({coordinates}) {
       <div className="create-feature__form">
         <input id="name" type="text" placeholder="Name" />
         <input id="description" type="text" placeholder="description" />
-        <input id="submitForm"type="button" value="Submit" />
+        <input id="submitForm" type="button" value="Submit" />
       </div>
     </section>
   )

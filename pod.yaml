@@ -47,7 +47,7 @@ spec:
     - name: conf  
       mountPath: /etc/nginx/conf.d/
   - name: api1
-    image: docker.io/arthurrabel/fastapi.with.geoalchemy:1.1
+    image: docker.io/arthurrabel/fastapi.with.geoalchemy:1.2
     ports:
     - containerPort: 81
     env:
@@ -67,7 +67,7 @@ spec:
       /wait-for-it.sh banco:5432 --timeout=30 --strict;
       uvicorn main:app --host 0.0.0.0 --port 81
   - name: api2
-    image: docker.io/arthurrabel/fastapi.with.geoalchemy:1.1
+    image: docker.io/arthurrabel/fastapi.with.geoalchemy:1.2
     ports:
     - containerPort: 82
     env:

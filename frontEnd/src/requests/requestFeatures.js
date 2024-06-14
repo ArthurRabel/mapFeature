@@ -1,5 +1,5 @@
 const requestFeatures = () => {
-    return fetch('http://localhost:8000/api/get/', {
+    return fetch('http://localhost:8000/api/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

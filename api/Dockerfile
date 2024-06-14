@@ -1,3 +1,6 @@
+#Não é necessario fazer build esse dockerfile para rodar aplicação
+#No arquivo pod.yaml já está definido para pegar do dockerhub
+
 FROM python:3.9
 
 WORKDIR /code

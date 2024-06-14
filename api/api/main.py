@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-@app.get("/api/get/")
+@app.get("/feature/")
 async def featureGet():
     features = get_features()
     return jsonable_encoder(features)
@@ -24,12 +24,12 @@ class ResponseFeature(BaseModel):
     description: str
     coordinates: list
 
-@app.post("/api/post/")
+@app.post("/feature/")
 async def featurePost(responseFeature: ResponseFeature):
     save_feature(responseFeature.name, responseFeature.description, responseFeature.coordinates)
     return {'message': 'Feature posted successfully'}
 
-@app.delete("/api/delete/{idfeature}")
+@app.delete("/feature/{idfeature}")
 async def featureDelete(idfeature: int):
     delete_feature(idfeature)
     return {'message': 'Feature deleted successfully'}
