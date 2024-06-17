@@ -1,11 +1,8 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Sequence
 from sqlalchemy import Integer, String, MetaData
 from geoalchemy2 import Geometry
 
 metadata = MetaData()
-
-global_id_sequence = Sequence('global_id_seq')
 
 class Base(DeclarativeBase):
    __abstract__ = True
