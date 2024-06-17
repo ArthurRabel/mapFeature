@@ -1,26 +1,27 @@
 from connectDB import session
-from modelsDB import Features
+from modelsDB import PointTable, LineTable, PolygonTable
 from shapely.geometry import Point, LineString, Polygon
 
-
 def delete_feature(idFeature):
-    feature = session.query(Features).filter(Features.id == idFeature).first()
-    session.delete(feature)
+    if(session.query(PointTable).filter(PointTable.id == idFeature).first()):
+        session.delete(session.query(PointTable).filter(PointTable.id == idFeature).first())
+    elif(session.query(LineTable).filter(LineTable.id == idFeature).first()):
+        session.delete(session.query(LineTable).filter(LineTable.id == idFeature).first())
+    elif(session.query(PolygonTable).filter(PolygonTable.id == idFeature).first()):
+        session.delete(session.query(PolygonTable).filter(PolygonTable.id == idFeature).first())    
     session.commit()
 
 def save_feature(name, description, coordinates):
     if len(coordinates) == 1:
-        coordinatesFeature = Point(coordinates[0]).wkt
+        session.add(PointTable(name=name, description=description, coordinates=Point(coordinates[0]).wkt))
     elif len(coordinates) == 2:
-        coordinatesFeature = LineString(coordinates).wkt
+        session.add(LineTable(name=name, description=description, coordinates=LineString(coordinates).wkt))
     elif len(coordinates) > 2:
-        coordinatesFeature = Polygon(coordinates).wkt
-
-    feature = Features(name=name, description=description, coordinates=coordinatesFeature)
-    session.add(feature)
+        session.add(PolygonTable(name=name, description=description, coordinates=Polygon(coordinates).wkt))
     session.commit()
 
 def get_features():
-    features = session.query(Features).all()
-    print(len(features))  # Add this line to check the length of the features list
+    features = session.query(PointTable).all()
+    features.extend(session.query(LineTable).all())
+    features.extend(session.query(PolygonTable).all())
     return [feature.to_dict() for feature in features]

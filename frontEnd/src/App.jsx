@@ -118,12 +118,12 @@ export default function App() {
       {isOpenForm && <CreateFeature key={coordinates} coordinates={coordinates} />}
       {(AddingFeature || isRemovingFeature) && 
         <span className='base-layout notice'>
-          {AddingFeature && <p>Clique no mapa para marcar os locais das features.</p>}
+          {AddingFeature && <p>Escolha o tipo de feature e clique no mapa para exibir</p>}
           {isRemovingFeature && <p>Clique na feature que deseja remover.</p>}
         </span>
       }
-      <button onClick={() => {if(!isRemovingFeature){dispatch(isAddingFeature())}}} className='base-layout add-feature'><AddIcon /></button>
-      <button onClick={() => {if(!AddingFeature){setIsRemovingFeature(true)}}} className='base-layout delete-feature'><DeleteIcon /></button>
+      {isRemovingFeature || <button onClick={() => {if(!isRemovingFeature){dispatch(isAddingFeature())}}} className='base-layout add-feature'><AddIcon /></button>}
+      {AddingFeature || <button onClick={() => {if(!AddingFeature){setIsRemovingFeature(true)}}} className='base-layout delete-feature'><DeleteIcon /></button>}
       <div id="map"></div>
     </>
   );

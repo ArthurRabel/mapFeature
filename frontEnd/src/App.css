@@ -27,6 +27,24 @@
   cursor: pointer;
 }
 
+.list-inputs{
+  list-style: none;
+  top: 95px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.list-inputs input{
+  background-color: #785eeb00;
+  color: white;
+  padding: 5px;
+  width: 100%;
+  text-align: start;
+  border: none;
+  border-bottom: solid 1px #9e8dec;
+  cursor: pointer;
+}
 .notice{
   top: 15px;
   left: 50%;
