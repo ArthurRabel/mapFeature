@@ -8,11 +8,11 @@ Coloque as senhas de sua escolha nos arquivos `adminSecret.yaml` e `fastApiSecre
 Crie os secrets:
 
 ```bash
-podman secret create adminSecret adminSecret.yaml
+podman secret create adminCredential adminSecret.yaml
 ```
 
 ```bash
-podman secret create fastApiSecret fastApiSecret.yaml
+podman secret create apiCredential fastApiSecret.yaml
 ```
 
 ## Rodar aplicação
