@@ -21,7 +21,7 @@ Na raiz do projeto, o arquivo `pod.yaml` configura um pod, com um container para
 Os comandos a seguir devem ser executados no terminal na raiz do projeto.
 
 > [!WARNING]
-> Necessario o podman estar instalado na versão mais recente.
+> Necessário que o podman esteja instalado na versão mais recente.
 
 ### Run
 
