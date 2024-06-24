@@ -16,32 +16,33 @@ Na raiz do projeto, o arquivo `pod.yaml` configura um pod, com um container para
 - Podman
 - Nginx
 
-## Start 
+## Comandos utéis
 
-## Criar secrets
-Antes de rodar a aplicação é necessario criar a build e os dois secrets, para as credenciais do usuario administrador do banco e para usuario da API.
+Os comandos a seguir devem ser executados no terminal na raiz do projeto.
 
-Vá para pasta `frontEnd` e digite o seguinte comando:
+> [!WARNING]
+> Necessario o podman estar instalado na versão mais recente.
 
-```bash
-npm run build
+### Run
+
+Cria os secrets, build e o pod caso seja a primeira vez sendo executado, se o pod já existir ele apenas inicializará.
+```bash 
+bash Run.sh
 ```
 
-Coloque as senhas de sua escolha nos arquivos `adminSecret.yaml` e `fastApiSecret.yaml`.
+### Stop
 
-Na raiz do projeto, crie os secrets:
-
+Para para a execução do pod:
 ```bash
-podman secret create adminCredential adminSecret.yaml
+bash Stop.sh
 ```
 
-```bash
-podman secret create apiCredential fastApiSecret.yaml
-```
+### Remove
 
-## Rodar aplicação
-```bash
-podman kube play pod.yaml
+Remove o pod e o secrets:
+
+```bash 
+bash Remove.sh
 ```
 
 ## Acessar
