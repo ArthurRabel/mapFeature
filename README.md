@@ -32,7 +32,7 @@ bash Run.sh
 
 ### Stop
 
-Para para a execução do pod:
+Para a execução do pod:
 ```bash
 bash Stop.sh
 ```
