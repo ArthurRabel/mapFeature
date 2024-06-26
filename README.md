@@ -27,14 +27,14 @@ Os comandos a seguir devem ser executados no terminal na raiz do projeto.
 
 Cria os secrets, build e o pod caso seja a primeira vez sendo executado, se o pod já existir ele apenas inicializará.
 ```bash 
-bash Run.sh
+bash scripts/run.sh
 ```
 
 ### Stop
 
 Para a execução do pod:
 ```bash
-bash Stop.sh
+bash scripts/stop.sh
 ```
 
 ### Remove
@@ -42,7 +42,7 @@ bash Stop.sh
 Remove o pod e o secrets:
 
 ```bash 
-bash Remove.sh
+bash scripts/remove.sh
 ```
 
 ## Acessar
