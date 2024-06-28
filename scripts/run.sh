@@ -17,7 +17,7 @@ if [ $? -eq 0 ]; then
     echo "Iniciando Pod..."
     podman pod start map-feature-latest > /dev/null
 
-    bash scripts/sucessoEcho.sh
+    bash scripts/successfulEcho.sh
 else
     echo "Projeto está sendo executado pela primeira vez."
     echo -e "Preparando o necessario para rodar... \n"
@@ -25,11 +25,12 @@ else
     ## Create build
     echo "Criando build..."
     cd frontEnd 
+    npm i > /dev/null
     npm run build > /dev/null
     cd ..
 
     echo "Criando pod..."
     podman kube play pod.yaml > /dev/null
 
-    bash sucessoEcho.sh
+    bash scripts/successfulEcho.sh
 fi
