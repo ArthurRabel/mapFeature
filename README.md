@@ -4,6 +4,8 @@ Este projeto é uma aplicação web full stack, que possui funcionalidades para 
 
 Na raiz do projeto, o arquivo `pod.yaml` configura um pod, com um container para Front-End, dois para Api e um para o banco de dados. Os dois containers API dividem as requisições por Round-robin.
 
+![Web 1](https://github.com/ArthurRabel/mapFeature/blob/main/frontEnd/src/assets/preview-md.png)
+
 ## Tecnologias utilizadas:
 - Python
 - FastApi
